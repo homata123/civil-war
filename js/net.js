@@ -11,7 +11,7 @@
   const PROTO = 1;
   const PREFIX = 'cw2010-dusk-';
   const LIBS = ['https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js', 'https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js'];
-  const TICK_MS = 200, FULL_MS = 1000, CHUNK = 12000, TIMEOUT_MS = 12000;
+  const TICK_MS = 200, FULL_MS = 1000, CHUNK = 12000, TIMEOUT_MS = 20000;
   const $ = id => document.getElementById(id);
   const esc = U.esc;
 
@@ -263,7 +263,7 @@
     if (!pl) return;
     if (m.t === 'prof' && !inGame) { pl.prof = cleanProfile(m.prof); pl.portraits = sanitizePortraits(m.portraits); broadcastLobby(); renderLobby(); return; }
     if (m.t === 'chat') { relayChat(pl, m.text); return; }
-    if (m.t === 'pong') { pl.ping = Math.round(performance.now() - m.ts); return; }
+    if (m.t === 'pong') { if (m.ts) pl.ping = Math.round(performance.now() - m.ts); return; }
     if (m.t === 'cmd' && inGame && pl.nid !== undefined) {
       const g = CW.Main.game(); if (!g) return;
       const r = CW.Cmd.exec(g, pl.nid, String(m.c), m.a || {});
@@ -307,6 +307,11 @@
     dirtyFlag = true;
   };
   Net.dirty = () => { dirtyFlag = true; };
+  setInterval(() => {
+    if (mode !== 'host' || inGame) return;
+    const now = performance.now();
+    for (const p of players) if (p.conn && p.online) send(p.conn, { t: 'ping', ts: now });
+  }, 2000);
 
   function hostStart() {
     if (mode !== 'host' || inGame) return;
@@ -325,6 +330,7 @@
       CW.me = 0;
       CW.Main.begin(g);
       CW.Main.save('auto');
+      lastPing = performance.now();
       for (const p of players.slice(1)) if (p.online) sendStart(p);
       sysChat('Khai cuộc! Chúc chư vị quân chủ vận nước hưng thịnh.');
       startWorker(); renderBar();
@@ -333,6 +339,7 @@
   }
   function sendStart(p) {
     const g = CW.Main.game(); if (!g || !p.conn) return;
+    p.seen = performance.now(); // khách còn phải tải & dựng bản đồ: tính lại mốc chờ từ lúc gửi
     send(p.conn, { t: 'start', you: p.nid, s: G.serialize(g), portraits: sharedPortraits, code, chat: chatLog.slice(-20) });
   }
   function fullStr(g) {
@@ -420,6 +427,8 @@
         if (m.chat) chatLog = m.chat;
         inGame = true; CW.me = m.you;
         CW.Main.begin(gg);
+        hostSeen = performance.now(); // dựng bản đồ có thể mất vài giây
+        send(conn, { t: 'pong', ts: 0 });
         renderBar();
         CW.UI.toast(`Ngài cai quản nước <b>${esc(gg.nations[m.you].name)}</b>. Enter để trò chuyện.`, 'good', 6000);
         break;
