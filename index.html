@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Civil War: The Dusk of Empires</title>
+  <meta name="description" content="Civil War: The Dusk of Empires — game chiến lược thời gian thực bối cảnh chiến quốc, chơi đơn hoặc nhiều người ngay trên trình duyệt.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif:ital,wght@0,400;0,600;1,400&display=swap">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%23a8322a'/%3E%3Ctext x='32' y='47' font-size='42' text-anchor='middle' fill='%23f0d48a' font-family='serif'%3E%E5%B8%9D%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <canvas id="map"></canvas>
+
+  <div id="hud" class="hidden">
+    <div id="topbar">
+      <div id="tb-nation"></div>
+      <div id="tb-res"></div>
+      <div id="tb-right">
+        <div id="tb-date"></div>
+        <div id="tb-speed"></div>
+      </div>
+    </div>
+    <div id="tb-menu"></div>
+    <div id="side" class="panel hidden"></div>
+    <div id="ticker"></div>
+    <div id="mini"><canvas id="minimap" width="330" height="225"></canvas></div>
+    <div id="hint"></div>
+    <div id="pausedTag" class="hidden">TẠM DỪNG</div>
+  </div>
+
+  <div id="audioCtl"></div>
+
+  <div id="modal" class="hidden">
+    <div class="mbox">
+      <div class="mhead"><h2 id="mtitle"></h2><button class="mclose" data-act="closeModal">✕</button></div>
+      <div id="mbody"></div>
+    </div>
+  </div>
+  <div id="confirm" class="hidden"><div class="cbox"><div id="ctext"></div><div class="crow"><button id="cyes" class="btn red">Đồng ý</button><button id="cno" class="btn">Hủy</button></div></div></div>
+  <div id="toasts"></div>
+  <div id="menu"></div>
+  <div id="tip" class="hidden"></div>
+  <input type="file" id="filePick" accept="image/*" hidden>
+
+  <script src="js/util.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/mapgen.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/ai.js"></script>
+  <script src="js/cmd.js"></script>
+  <script src="js/portraits.js"></script>
+  <script src="js/render.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/net.js"></script>
+  <script src="js/cinema.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
