@@ -112,6 +112,7 @@
   Net.showLobby = function (joinCode) {
     if (CW.Cinema) CW.Cinema.startAmbient();
     CW.UI.onSetupRefresh = null;
+    CW.UI.setupMode = ''; // rời màn sửa quốc gia: cho phép vẽ lại phòng chờ
     if (!myName) { try { myName = localStorage.getItem('cw_mp_name') || ''; } catch (e) { /* bỏ qua */ } }
     renderLobby();
     if (joinCode) {
